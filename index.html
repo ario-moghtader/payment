@@ -91,28 +91,33 @@
         .preview-img { max-height: 150px; display: none; margin: 20px auto 0; border-radius: 15px; }
 
         /* --- PRINT STYLES (Fixed) --- */
-        #print-header { display: none; text-align: center; margin-bottom: 20px; border-bottom: 3px solid #000; padding-bottom: 15px; }
-        #print-header h2 { margin: 0; font-size: 14pt; direction: ltr; font-weight: bold; } 
+        #print-header { display: none; text-align: center; border-bottom: 2px solid #333; padding-bottom: 15px; margin-bottom: 20px; }
+        #print-header h2 { margin: 0; font-size: 14pt; direction: ltr; font-weight: bold; color: #000; } 
 
         @media print {
-            /* حذف مارجین‌های پیش‌فرض مرورگر برای حذف تاریخ میلادی */
-            @page { margin: 0.5cm; }
+            /* 1. حذف حاشیه مرورگر برای از بین بردن هدرهای پیش‌فرض میلادی */
+            @page { margin: 0; size: auto; }
             
-            body { background: white; color: black; padding: 0; margin: 0; }
+            /* 2. تنظیم حاشیه برای محتوای داخلی تا به لبه کاغذ نچسبد */
+            body { background: white; color: black; padding: 1cm; margin: 0; }
+            
+            /* مخفی کردن عناصر اضافی */
             header, .stats-container, .btn-container, .tabs, .form-card, .filter-section, .item-actions, #filterOptions, .modal:not(#reportModal) { display: none !important; }
             
-            /* نمایش هدر اختصاصی ما */
-            #print-header { display: block !important; margin-top: 0; padding-top: 10px; }
+            /* نمایش هدر اختصاصی شمسی */
+            #print-header { display: block !important; }
             
             .container { max-width: 100%; padding: 0; margin: 0; width: 100%; }
             .list-section { display: block; margin-top: 0; }
             
             .list-img, .detail-img { max-width: 250px; max-height: 250px; display: block !important; margin: 10px 0; border: 1px solid #ccc; }
             
+            /* تنظیمات مودال برای پرینت */
             #reportModal { display: block !important; position: static; background: white; height: auto; z-index: auto; width: 100%; }
-            #reportModal .modal-content { box-shadow: none; max-width: 100%; width: 100%; overflow: visible; padding: 0; margin: 0; }
+            #reportModal .modal-content { box-shadow: none; max-width: 100%; width: 100%; overflow: visible; padding: 0; margin: 0; border: none; }
             #reportModal button { display: none; }
             
+            /* نمایش فقط بخش فعال (خلاصه یا ریز) */
             #reportSummaryView, #reportDetailView { display: none; }
             .print-active { display: block !important; width: 100%; }
 
@@ -373,13 +378,11 @@
     // --- Core Logic ---
     let transactions = JSON.parse(localStorage.getItem('acc_data')) || [];
 
-    // --- Dynamic Header Logic ---
     function updateHeader() {
         const now = new Date();
         const j = gregorianToJalali(now.getFullYear(), now.getMonth() + 1, now.getDate());
         const time = `${now.getHours()}:${(now.getMinutes()<10?'0':'')+now.getMinutes()}`;
         const date = `${j.year}/${(j.month<10?'0':'')+j.month}/${(j.day<10?'0':'')+j.day}`;
-        
         const titleStr = `حسابدار شخصی 💰 آریو مقتدر 09120857429   ${time}   ${date}`;
         
         document.getElementById('main-title').innerText = titleStr;
@@ -507,20 +510,6 @@
         renderList(filtered);
     }
 
-    function resetFilters() {
-        document.getElementById('filterStart').value = '';
-        document.getElementById('filterEnd').value = '';
-        document.getElementById('filterMin').value = '';
-        document.getElementById('filterMax').value = '';
-        showAllTransactions();
-    }
-
-    function showAllTransactions() {
-        document.getElementById('filterStart').value = '';
-        document.getElementById('filterEnd').value = '';
-        renderList(transactions);
-    }
-
     function renderList(list) {
         const container = document.getElementById('listContainer');
         container.innerHTML = '';
@@ -568,7 +557,7 @@
         document.getElementById('statTotalBorrowed').textContent = formatNumber(totalBorrowed);
     }
 
-    // --- Report ---
+    // --- REPORT ---
     function openReportModal() {
         document.getElementById('reportSummaryView').style.display = 'block';
         document.getElementById('reportDetailView').style.display = 'none';
@@ -579,9 +568,8 @@
     }
 
     function showMonthlyReportTable() {
-        // Clear previous content to prevent duplication
         const tbody = document.getElementById('reportTableBody');
-        tbody.innerHTML = '';
+        tbody.innerHTML = ''; // جلوگیری از تکرار
 
         const expenses = transactions.filter(t => t.type === 'expense');
         const report = {};
@@ -606,9 +594,8 @@
     }
 
     function showMonthDetails(monthKey) {
-        // Clear previous content to prevent duplication
         const container = document.getElementById('detailContainer');
-        container.innerHTML = '';
+        container.innerHTML = ''; // جلوگیری از تکرار
 
         const details = transactions.filter(t => t.type === 'expense' && t.date.startsWith(monthKey)).sort((a,b) => b.date.localeCompare(a.date));
         
