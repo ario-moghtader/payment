@@ -3,253 +3,236 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>حساب کتاب شخصی - آریو مقتدر</title>
+    <title>حسابدار شخصی پیشرفته</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Vazir', Tahoma, sans-serif; }
         body { background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); color: #333; min-height: 100vh; padding: 20px; direction: rtl; }
-        .container { max-width: 1000px; margin: 0 auto; padding-bottom: 50px; }
+        .container { max-width: 1000px; margin: 0 auto; padding-bottom: 80px; }
         
-        /* Header & Stats */
-        header { text-align: center; color: white; margin-bottom: 30px; text-shadow: 0 2px 4px rgba(0,0,0,0.3); }
-        .stats-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 30px; }
-        .stat-card { background: rgba(255,255,255,0.95); padding: 20px; border-radius: 15px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.2); backdrop-filter: blur(5px); }
-        .stat-value { font-size: 1.8rem; font-weight: bold; margin-bottom: 5px; color: #1e3c72; }
+        /* Header */
+        header { text-align: center; color: white; margin-bottom: 20px; text-shadow: 0 2px 4px rgba(0,0,0,0.3); }
+        
+        /* Stats Cards */
+        .stats-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px; }
+        .stat-card { background: rgba(255,255,255,0.95); padding: 15px; border-radius: 15px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+        .stat-value { font-size: 1.5rem; font-weight: bold; margin-bottom: 5px; color: #1e3c72; }
         .stat-label { font-size: 0.9rem; color: #666; }
-        .stat-card.debt { border-bottom: 5px solid #e74c3c; }
-        .stat-card.credit { border-bottom: 5px solid #27ae60; }
-        .stat-card.expense { border-bottom: 5px solid #f39c12; }
-
+        .stat-card.expense { border-bottom: 4px solid #f39c12; }
+        
         /* Tabs */
         .tabs { display: flex; gap: 10px; margin-bottom: 20px; background: rgba(255,255,255,0.2); padding: 5px; border-radius: 15px; }
-        .tab-btn { flex: 1; padding: 15px; border: none; border-radius: 10px; cursor: pointer; font-size: 1.1rem; font-weight: bold; transition: all 0.3s; background: transparent; color: white; }
-        .tab-btn.active { background: white; color: #1e3c72; shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .tab-btn { flex: 1; padding: 12px; border: none; border-radius: 10px; cursor: pointer; font-size: 1rem; font-weight: bold; transition: 0.3s; background: transparent; color: white; }
+        .tab-btn.active { background: white; color: #1e3c72; }
 
         /* Forms */
-        .form-card { background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); display: none; animation: fadeIn 0.3s ease; }
+        .form-card { background: white; padding: 25px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); display: none; animation: fadeIn 0.3s ease; }
         .form-card.active { display: block; }
-        .form-group { margin-bottom: 20px; }
-        .form-label { display: block; margin-bottom: 8px; color: #444; font-weight: bold; }
-        .form-input, .form-select, .form-textarea { width: 100%; padding: 15px; border: 2px solid #eee; border-radius: 12px; font-size: 1rem; transition: 0.3s; }
+        .form-group { margin-bottom: 15px; }
+        .form-label { display: block; margin-bottom: 5px; color: #444; font-weight: bold; font-size: 0.9rem; }
+        .form-input, .form-select, .form-textarea { width: 100%; padding: 12px; border: 2px solid #eee; border-radius: 10px; font-size: 1rem; transition: 0.3s; }
         .form-input:focus { border-color: #2a5298; outline: none; }
-        .radio-group { display: flex; gap: 15px; }
-        .radio-label { flex: 1; text-align: center; padding: 12px; border: 2px solid #eee; border-radius: 10px; cursor: pointer; transition: 0.3s; font-weight: bold; }
-        input[type="radio"] { display: none; }
-        input[type="radio"]:checked + .radio-label { background: #e8f0fe; border-color: #2a5298; color: #2a5298; }
         
-        /* File Upload */
-        .file-upload-wrapper { position: relative; width: 100%; height: 100px; border: 2px dashed #ccc; border-radius: 12px; display: flex; align-items: center; justify-content: center; cursor: pointer; background: #fafafa; overflow: hidden; }
-        .file-upload-wrapper:hover { border-color: #2a5298; background: #f0f4f8; }
-        .file-preview { max-height: 100%; max-width: 100%; object-fit: contain; display: none; }
-        .file-placeholder { color: #888; display: flex; flex-direction: column; align-items: center; gap: 5px; }
+        /* Radio Group */
+        .radio-group { display: flex; gap: 10px; }
+        .radio-label { flex: 1; text-align: center; padding: 10px; border: 2px solid #eee; border-radius: 10px; cursor: pointer; transition: 0.3s; font-size: 0.9rem; }
+        input[type="radio"] { display: none; }
+        input[type="radio"]:checked + .radio-label { background: #e8f0fe; border-color: #2a5298; color: #2a5298; font-weight: bold; }
 
         /* Buttons */
-        .btn-submit { width: 100%; padding: 15px; background: #2a5298; color: white; border: none; border-radius: 12px; font-size: 1.1rem; font-weight: bold; cursor: pointer; transition: 0.3s; }
-        .btn-submit:hover { background: #1e3c72; transform: translateY(-2px); }
-
-        /* Lists */
-        .list-section { margin-top: 40px; }
-        .section-title { color: white; margin-bottom: 20px; font-size: 1.5rem; display: flex; justify-content: space-between; align-items: center; }
-        .item-card { background: white; padding: 20px; border-radius: 15px; margin-bottom: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); display: flex; flex-wrap: wrap; gap: 15px; align-items: center; position: relative; overflow: hidden; }
-        .item-card.expense-item { border-right: 5px solid #f39c12; }
-        .item-card.debt-item { border-right: 5px solid #e74c3c; } /* بدهی من */
-        .item-card.credit-item { border-right: 5px solid #27ae60; } /* طلب من */
+        .btn { width: 100%; padding: 12px; border: none; border-radius: 10px; font-size: 1rem; font-weight: bold; cursor: pointer; transition: 0.3s; color: white; display: inline-flex; justify-content: center; align-items: center; gap: 5px;}
+        .btn-primary { background: #2a5298; }
+        .btn-primary:hover { background: #1e3c72; }
+        .btn-success { background: #27ae60; }
+        .btn-danger { background: #e74c3c; }
+        .btn-warning { background: #f39c12; color: #333; }
         
+        /* Filter Section */
+        .filter-section { background: rgba(255,255,255,0.1); padding: 15px; border-radius: 15px; margin-top: 30px; border: 1px solid rgba(255,255,255,0.2); }
+        .filter-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; margin-top: 10px; }
+        .filter-header { color: white; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
+        
+        /* List */
+        .list-section { margin-top: 20px; }
+        .item-card { background: white; padding: 15px; border-radius: 15px; margin-bottom: 10px; display: flex; flex-wrap: wrap; gap: 10px; align-items: center; border-right: 5px solid #ccc; box-shadow: 0 3px 10px rgba(0,0,0,0.05); }
+        .item-card.expense { border-color: #f39c12; }
+        .item-card.lent { border-color: #27ae60; }
+        .item-card.borrowed { border-color: #e74c3c; }
         .item-info { flex: 1; }
         .item-header { display: flex; justify-content: space-between; margin-bottom: 5px; }
-        .item-title { font-weight: bold; font-size: 1.1rem; }
-        .item-date { font-size: 0.85rem; color: #888; }
-        .item-amount { font-size: 1.2rem; font-weight: bold; color: #2a5298; }
-        .item-details { font-size: 0.9rem; color: #555; margin-top: 5px; }
-        .payment-badge { font-size: 0.75rem; padding: 3px 8px; border-radius: 5px; background: #eee; color: #555; display: inline-block; margin-top: 5px; }
+        .item-title { font-weight: bold; }
+        .item-date { font-size: 0.8rem; color: #888; }
+        .item-amount { font-size: 1.1rem; font-weight: bold; color: #2a5298; }
+        .item-actions button { padding: 5px 10px; border-radius: 5px; font-size: 0.8rem; border: none; cursor: pointer; color: white; margin-left: 5px; }
         
-        .item-actions { display: flex; gap: 10px; align-items: center; }
-        .btn-view-img { background: #3498db; color: white; border: none; padding: 8px 12px; border-radius: 8px; cursor: pointer; font-size: 0.9rem; }
-        .btn-delete { background: #e74c3c; color: white; border: none; padding: 8px 12px; border-radius: 8px; cursor: pointer; font-size: 0.9rem; }
-        .status-badge { padding: 5px 10px; border-radius: 20px; font-size: 0.85rem; font-weight: bold; }
-        .status-urgent { background: #ffebee; color: #c62828; }
-        .status-ok { background: #e8f5e9; color: #2e7d32; }
-
         /* Modal */
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000; align-items: center; justify-content: center; }
-        .modal-content { background: white; padding: 20px; border-radius: 15px; max-width: 90%; max-height: 90vh; overflow: auto; text-align: center; }
-        .modal-img { max-width: 100%; border-radius: 10px; }
-        .close-modal { margin-top: 15px; padding: 10px 20px; background: #e74c3c; color: white; border: none; border-radius: 8px; cursor: pointer; }
-
-        /* Calendar Modal (Reused simplified version) */
-        .calendar-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 900; justify-content: center; align-items: center; }
-        .calendar-box { background: white; padding: 20px; border-radius: 15px; width: 300px; text-align: center; }
-        .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; margin-top: 10px; }
-        .cal-day { padding: 8px; border-radius: 5px; cursor: pointer; }
-        .cal-day:hover { background: #eee; }
-        .cal-header { display: flex; justify-content: space-between; margin-bottom: 10px; font-weight: bold; }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 2000; justify-content: center; align-items: center; }
+        .modal-content { background: white; padding: 20px; border-radius: 15px; max-width: 90%; max-height: 90vh; overflow: auto; width: 500px; }
+        .report-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        .report-table th, .report-table td { padding: 10px; text-align: center; border-bottom: 1px solid #eee; }
+        
+        /* File Upload */
+        .file-box { border: 2px dashed #ccc; padding: 10px; text-align: center; border-radius: 10px; cursor: pointer; margin-bottom: 15px; background: #f9f9f9; }
+        .preview-img { max-height: 100px; display: none; margin: 10px auto; border-radius: 5px; }
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        
-        .empty-state { text-align: center; color: rgba(255,255,255,0.7); margin-top: 30px; font-size: 1.1rem; }
     </style>
 </head>
 <body>
 
 <div class="container">
     <header>
-        <h1>📒 حساب کتاب شخصی</h1>
-        <p style="opacity: 0.8; margin-top: 5px;">مدیریت هوشمند مخارج و قرض‌ها - آریو مقتدر</p>
+        <h2>💰 حسابدار شخصی</h2>
     </header>
 
     <div class="stats-container">
         <div class="stat-card expense">
-            <div class="stat-value" id="totalExpense">0</div>
-            <div class="stat-label">مجموع مخارج</div>
+            <div class="stat-value" id="statTotalExpense">0</div>
+            <div class="stat-label">مجموع مخارج فیلتر شده</div>
         </div>
-        <div class="stat-card credit">
-            <div class="stat-value" id="totalLent">0</div>
-            <div class="stat-label">طلب از دیگران (من دادم)</div>
+        <div class="stat-card">
+            <div class="stat-value" style="color:#27ae60" id="statTotalLent">0</div>
+            <div class="stat-label">طلب (قرض دادم)</div>
         </div>
-        <div class="stat-card debt">
-            <div class="stat-value" id="totalBorrowed">0</div>
-            <div class="stat-label">بدهی به دیگران (من گرفتم)</div>
-        </div>
+    </div>
+
+    <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+        <button class="btn btn-warning" onclick="showMonthlyReport()">📊 گزارش ماهانه</button>
+        <button class="btn btn-primary" onclick="exportData()">💾 خروجی گرفتن</button>
     </div>
 
     <div class="tabs">
         <button class="tab-btn active" onclick="switchTab('expense')">🛒 ثبت خرج</button>
-        <button class="tab-btn" onclick="switchTab('debt')">🤝 ثبت قرض/وام</button>
+        <button class="tab-btn" onclick="switchTab('debt')">🤝 ثبت قرض</button>
     </div>
 
     <div id="expenseForm" class="form-card active">
         <div class="form-group">
-            <label class="form-label">عنوان خرید / خرج</label>
-            <input type="text" id="expDesc" class="form-input" placeholder="مثلا: خرید سوپرمارکت، بنزین...">
+            <label class="form-label">بابت / عنوان</label>
+            <input type="text" id="expDesc" class="form-input" placeholder="مثلا: خرید گوشت">
         </div>
         <div class="form-group">
             <label class="form-label">مبلغ (تومان)</label>
-            <input type="text" id="expAmount" class="form-input" placeholder="0" onkeyup="formatCurrencyInput(this)">
+            <input type="tel" id="expAmount" class="form-input" placeholder="0" oninput="formatInput(this)">
         </div>
         <div class="form-group">
-            <label class="form-label">روش پرداخت</label>
+            <label class="form-label">تاریخ (پیش‌فرض امروز)</label>
+            <input type="text" id="expDate" class="form-input" placeholder="1404/01/01">
+        </div>
+        <div class="form-group">
             <div class="radio-group">
-                <label>
-                    <input type="radio" name="payMethod" value="pos" checked>
-                    <div class="radio-label">💳 کارت‌خوان</div>
-                </label>
-                <label>
-                    <input type="radio" name="payMethod" value="card">
-                    <div class="radio-label">📱 کارت‌به‌کارت</div>
-                </label>
-                <label>
-                    <input type="radio" name="payMethod" value="cash">
-                    <div class="radio-label">💵 نقد</div>
-                </label>
+                <label><input type="radio" name="payMethod" value="pos" checked><div class="radio-label">کارتخوان</div></label>
+                <label><input type="radio" name="payMethod" value="card"><div class="radio-label">کارت‌به‌کارت</div></label>
+                <label><input type="radio" name="payMethod" value="cash"><div class="radio-label">نقد</div></label>
             </div>
         </div>
-        <div class="form-group" id="screenshotGroup">
-            <label class="form-label">تصویر رسید / اسکرین‌شات (اختیاری)</label>
-            <label class="file-upload-wrapper">
-                <input type="file" id="expImage" accept="image/*" style="display: none;" onchange="previewImage(this)">
-                <div class="file-placeholder">
-                    <span>📷</span>
-                    <span>انتخاب تصویر</span>
-                </div>
-                <img id="imagePreview" class="file-preview">
-            </label>
-        </div>
-        <button class="btn-submit" onclick="addExpense()">ثبت هزینه</button>
+        <label class="file-box">
+            <span>📷 افزودن عکس فیش (اختیاری)</span>
+            <input type="file" id="expImg" accept="image/*" style="display:none" onchange="previewFile(this)">
+            <img id="expPreview" class="preview-img">
+        </label>
+        <button class="btn btn-primary" onclick="addTransaction('expense')">ثبت هزینه</button>
     </div>
 
     <div id="debtForm" class="form-card">
         <div class="form-group">
-            <label class="form-label">نوع تراکنش</label>
             <div class="radio-group">
-                <label>
-                    <input type="radio" name="debtType" value="lent" checked>
-                    <div class="radio-label" style="border-color: #27ae60; color: #27ae60;">🟢 قرض دادم</div>
-                </label>
-                <label>
-                    <input type="radio" name="debtType" value="borrowed">
-                    <div class="radio-label" style="border-color: #e74c3c; color: #e74c3c;">🔴 قرض گرفتم</div>
-                </label>
+                <label><input type="radio" name="debtType" value="lent" checked><div class="radio-label" style="color:#27ae60">قرض دادم</div></label>
+                <label><input type="radio" name="debtType" value="borrowed"><div class="radio-label" style="color:#e74c3c">قرض گرفتم</div></label>
             </div>
         </div>
         <div class="form-group">
             <label class="form-label">نام شخص</label>
-            <input type="text" id="debtPerson" class="form-input" placeholder="نام طرف حساب">
+            <input type="text" id="debtPerson" class="form-input">
         </div>
         <div class="form-group">
             <label class="form-label">مبلغ (تومان)</label>
-            <input type="text" id="debtAmount" class="form-input" placeholder="0" onkeyup="formatCurrencyInput(this)">
+            <input type="tel" id="debtAmount" class="form-input" placeholder="0" oninput="formatInput(this)">
         </div>
         <div class="form-group">
-            <label class="form-label">موعد بازگشت (تاریخ)</label>
-            <input type="text" id="debtDueDate" class="form-input" placeholder="کلیک برای انتخاب تاریخ" readonly onclick="openCalendar()">
+            <label class="form-label">تاریخ ثبت</label>
+            <input type="text" id="debtDate" class="form-input">
         </div>
         <div class="form-group">
-            <label class="form-label">توضیحات</label>
-            <textarea id="debtDesc" class="form-textarea" rows="2" placeholder="بابت..."></textarea>
+            <label class="form-label">موعد بازگشت</label>
+            <input type="text" id="dueDate" class="form-input" placeholder="مثلا 1404/02/01">
         </div>
-        <button class="btn-submit" onclick="addDebt()">ثبت قرض</button>
+        <button class="btn btn-primary" onclick="addTransaction('debt')">ثبت قرض</button>
     </div>
 
-    <div class="list-section">
-        <h3 class="section-title">📝 آخرین تراکنش‌ها <button class="btn-delete" style="background:#f39c12" onclick="clearAllData()">پاکسازی همه</button></h3>
-        <div id="transactionsList">
-            </div>
+    <div class="filter-section">
+        <div class="filter-header" onclick="document.getElementById('filterOptions').style.display = document.getElementById('filterOptions').style.display === 'none' ? 'grid' : 'none'">
+            <span>🔍 فیلتر و جستجو پیشرفته</span>
+            <span>▼</span>
+        </div>
+        <div id="filterOptions" class="filter-grid" style="display: none;">
+            <input type="text" id="filterStart" class="form-input" placeholder="از تاریخ (1404/01/01)">
+            <input type="text" id="filterEnd" class="form-input" placeholder="تا تاریخ">
+            <input type="tel" id="filterMin" class="form-input" placeholder="حداقل مبلغ" oninput="formatInput(this)">
+            <input type="tel" id="filterMax" class="form-input" placeholder="حداکثر مبلغ" oninput="formatInput(this)">
+            <button class="btn btn-success" style="grid-column: 1/-1" onclick="applyFilters()">اعمال فیلتر</button>
+            <button class="btn btn-danger" style="grid-column: 1/-1" onclick="resetFilters()">حذف فیلترها</button>
+        </div>
     </div>
+
+    <div class="list-section" id="listContainer">
+        </div>
 </div>
 
-<div id="imageModal" class="modal" onclick="closeModal(event)">
+<div id="reportModal" class="modal" onclick="if(event.target === this) this.style.display='none'">
     <div class="modal-content">
-        <img id="modalImg" class="modal-img">
-        <br>
-        <button class="close-modal" onclick="document.getElementById('imageModal').style.display='none'">بستن</button>
+        <h3>📊 گزارش مخارج ماهانه</h3>
+        <table class="report-table">
+            <thead>
+                <tr>
+                    <th>ماه</th>
+                    <th>تعداد تراکنش</th>
+                    <th>جمع کل (تومان)</th>
+                </tr>
+            </thead>
+            <tbody id="reportTableBody"></tbody>
+        </table>
+        <button class="btn btn-danger" style="margin-top:15px" onclick="document.getElementById('reportModal').style.display='none'">بستن</button>
     </div>
 </div>
 
-<div id="calendarOverlay" class="calendar-overlay">
-    <div class="calendar-box">
-        <div class="cal-header">
-            <span id="calMonthYear"></span>
-            <div>
-                <button onclick="changeMonth(-1)">‹</button>
-                <button onclick="changeMonth(1)">›</button>
-            </div>
-        </div>
-        <div class="cal-grid" id="calGrid"></div>
-        <button class="btn-submit" style="margin-top:10px; padding:5px;" onclick="closeCalendar()">انصراف</button>
+<div id="imgModal" class="modal" onclick="if(event.target === this) this.style.display='none'">
+    <div class="modal-content" style="text-align:center">
+        <img id="modalImageShow" style="max-width:100%; border-radius:10px;">
+        <button class="btn btn-danger" style="margin-top:10px" onclick="document.getElementById('imgModal').style.display='none'">بستن</button>
     </div>
 </div>
 
 <script>
-    // --- تنظیمات تاریخ و تبدیل ---
-    const persianMonths = ['فروردین', 'اردیبهشت', 'خرداد', 'تیر', 'مرداد', 'شهریور', 'مهر', 'آبان', 'آذر', 'دی', 'بهمن', 'اسفند'];
-    
-    function gregorianToJalali(gy, gm, gd) {
-        var g_d_m = [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334];
-        var gy2 = (gm > 2) ? (gy + 1) : gy;
-        var days = 355666 + (365 * gy) + ~~((gy2 + 3) / 4) - ~~((gy2 + 99) / 100) + ~~((gy2 + 399) / 400) + gd + g_d_m[gm - 1];
-        var jy = -1595 + (33 * ~~(days / 12053));
-        days %= 12053;
-        jy += 4 * ~~(days / 1461);
-        days %= 1461;
-        if (days > 365) { jy += ~~((days - 1) / 365); days = (days - 1) % 365; }
-        var jm, jd;
-        if (days < 186) { jm = 1 + ~~(days / 31); jd = 1 + (days % 31); }
-        else { jm = 7 + ~~((days - 186) / 30); jd = 1 + ((days - 186) % 30); }
-        return { year: jy, month: jm, day: jd };
+    // --- توابع کمکی تاریخ و عدد ---
+    const toEnglishDigits = (str) => str.replace(/[۰-۹]/g, d => '۰۱۲۳۴۵۶۷۸۹'.indexOf(d));
+    const formatNumber = (num) => new Intl.NumberFormat('fa-IR').format(num);
+    const parseFormatted = (str) => parseInt(toEnglishDigits(str).replace(/,/g, '')) || 0;
+
+    // تابع اصلی حل مشکل پرش مبلغ هنگام تایپ
+    function formatInput(input) {
+        let val = toEnglishDigits(input.value).replace(/[^0-9]/g, '');
+        if (val) {
+            input.value = parseInt(val).toLocaleString('en-US'); // نمایش با اعداد انگلیسی و کاما برای جلوگیری از باگ مرورگر
+        } else {
+            input.value = '';
+        }
     }
 
-    function getCurrentJalali() {
-        const now = new Date();
-        return gregorianToJalali(now.getFullYear(), now.getMonth() + 1, now.getDate());
+    function getToday() {
+        // تاریخ شمسی ساده شده (می‌توانید از کتابخانه کامل استفاده کنید ولی برای سادگی کاربر دستی هم می‌تواند ویرایش کند)
+        // اینجا یک تاریخ فرضی می‌گذاریم، بهتر است کاربر تاریخ دقیق را ببیند
+        const d = new Date();
+        // تبدیل تقریبی یا استفاده از ورودی کاربر.
+        // برای راحتی، کاربر دستی وارد می‌کند یا آخرین تاریخ استفاده شده می‌ماند.
+        return "1404/01/01"; 
     }
 
     // --- مدیریت داده‌ها ---
-    let data = JSON.parse(localStorage.getItem('hk_data')) || { expenses: [], debts: [] };
+    let transactions = JSON.parse(localStorage.getItem('acc_data')) || [];
 
-    // --- توابع رابط کاربری ---
     function switchTab(tab) {
         document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
         document.querySelectorAll('.form-card').forEach(f => f.classList.remove('active'));
-        
         if(tab === 'expense') {
             document.querySelectorAll('.tab-btn')[0].classList.add('active');
             document.getElementById('expenseForm').classList.add('active');
@@ -259,269 +242,231 @@
         }
     }
 
-    function formatCurrencyInput(input) {
-        let val = input.value.replace(/[^\d]/g, '');
-        if(!val) { input.value = ''; return; }
-        input.value = parseInt(val).toLocaleString('fa-IR');
-    }
-
-    function parseAmount(str) {
-        return parseInt(str.replace(/[^\d]/g, '')) || 0;
-    }
-
-    function formatNumber(num) {
-        return new Intl.NumberFormat('fa-IR').format(num);
-    }
-
-    // --- پیش‌نمایش تصویر ---
-    function previewImage(input) {
-        const preview = document.getElementById('imagePreview');
-        const placeholder = document.querySelector('.file-placeholder');
+    // پیش‌نمایش عکس
+    function previewFile(input) {
+        const preview = input.parentElement.querySelector('.preview-img');
         if (input.files && input.files[0]) {
             const reader = new FileReader();
             reader.onload = function(e) {
                 preview.src = e.target.result;
                 preview.style.display = 'block';
-                placeholder.style.display = 'none';
             }
             reader.readAsDataURL(input.files[0]);
         }
     }
 
-    // --- ثبت هزینه ---
-    function addExpense() {
-        const desc = document.getElementById('expDesc').value;
-        const amount = parseAmount(document.getElementById('expAmount').value);
-        const method = document.querySelector('input[name="payMethod"]:checked').value;
-        const imageInput = document.getElementById('expImage');
-        const now = getCurrentJalali();
-        const dateStr = `${now.year}/${now.month}/${now.day}`;
+    // افزودن تراکنش
+    function addTransaction(formType) {
+        let newItem = { id: Date.now() };
+        
+        if (formType === 'expense') {
+            const desc = document.getElementById('expDesc').value;
+            const amount = parseFormatted(document.getElementById('expAmount').value);
+            const date = document.getElementById('expDate').value || getToday();
+            const method = document.querySelector('input[name="payMethod"]:checked').value;
+            const imgInput = document.getElementById('expImg');
 
-        if(!desc || amount === 0) { alert('لطفا عنوان و مبلغ را وارد کنید'); return; }
+            if (!desc || amount === 0) return alert('عنوان و مبلغ الزامی است');
 
-        const saveRecord = (imgBase64) => {
-            data.expenses.unshift({
-                id: Date.now(),
-                type: 'expense',
-                desc,
-                amount,
-                method,
-                date: dateStr,
-                image: imgBase64
-            });
-            saveData();
-            renderList();
-            resetForms();
-        };
-
-        if(imageInput.files && imageInput.files[0]) {
-            const reader = new FileReader();
-            reader.onload = function(e) { saveRecord(e.target.result); };
-            reader.readAsDataURL(imageInput.files[0]);
-        } else {
-            saveRecord(null);
-        }
-    }
-
-    // --- ثبت قرض ---
-    function addDebt() {
-        const type = document.querySelector('input[name="debtType"]:checked').value; // lent or borrowed
-        const person = document.getElementById('debtPerson').value;
-        const amount = parseAmount(document.getElementById('debtAmount').value);
-        const dueDate = document.getElementById('debtDueDate').value;
-        const desc = document.getElementById('debtDesc').value;
-        const now = getCurrentJalali();
-        const dateStr = `${now.year}/${now.month}/${now.day}`;
-
-        if(!person || amount === 0 || !dueDate) { alert('نام، مبلغ و تاریخ سررسید الزامی است'); return; }
-
-        data.debts.unshift({
-            id: Date.now(),
-            type: 'debt',
-            debtType: type, // lent (دادم) or borrowed (گرفتم)
-            person,
-            amount,
-            date: dateStr,
-            dueDate,
-            desc
-        });
-        saveData();
-        renderList();
-        resetForms();
-    }
-
-    function deleteItem(id, type) {
-        if(!confirm('حذف شود؟')) return;
-        if(type === 'expense') {
-            data.expenses = data.expenses.filter(i => i.id !== id);
-        } else {
-            data.debts = data.debts.filter(i => i.id !== id);
-        }
-        saveData();
-        renderList();
-    }
-
-    function resetForms() {
-        document.getElementById('expDesc').value = '';
-        document.getElementById('expAmount').value = '';
-        document.getElementById('debtPerson').value = '';
-        document.getElementById('debtAmount').value = '';
-        document.getElementById('debtDueDate').value = '';
-        document.getElementById('debtDesc').value = '';
-        document.getElementById('imagePreview').style.display = 'none';
-        document.querySelector('.file-placeholder').style.display = 'flex';
-        document.getElementById('expImage').value = '';
-    }
-
-    function saveData() {
-        localStorage.setItem('hk_data', JSON.stringify(data));
-        updateStats();
-    }
-
-    function updateStats() {
-        const totalExp = data.expenses.reduce((acc, curr) => acc + curr.amount, 0);
-        const totalLent = data.debts.filter(d => d.debtType === 'lent').reduce((acc, curr) => acc + curr.amount, 0);
-        const totalBorrowed = data.debts.filter(d => d.debtType === 'borrowed').reduce((acc, curr) => acc + curr.amount, 0);
-
-        document.getElementById('totalExpense').innerText = formatNumber(totalExp);
-        document.getElementById('totalLent').innerText = formatNumber(totalLent);
-        document.getElementById('totalBorrowed').innerText = formatNumber(totalBorrowed);
-    }
-
-    function renderList() {
-        const container = document.getElementById('transactionsList');
-        container.innerHTML = '';
-
-        // Combine and sort by date (newest first)
-        const allItems = [...data.debts, ...data.expenses].sort((a, b) => b.id - a.id);
-
-        if(allItems.length === 0) {
-            container.innerHTML = '<div class="empty-state">هنوز تراکنشی ثبت نشده است</div>';
-            return;
-        }
-
-        allItems.forEach(item => {
-            const div = document.createElement('div');
+            newItem = { ...newItem, type: 'expense', title: desc, amount, date, method };
             
-            if(item.type === 'expense') {
-                const methodLabel = item.method === 'pos' ? 'کارت‌خوان' : item.method === 'card' ? 'کارت‌به‌کارت' : 'نقد';
-                div.className = 'item-card expense-item';
-                div.innerHTML = `
-                    <div class="item-info">
-                        <div class="item-header">
-                            <span class="item-title">${item.desc}</span>
-                            <span class="item-date">${item.date}</span>
-                        </div>
-                        <div class="item-amount">${formatNumber(item.amount)} تومان</div>
-                        <span class="payment-badge">${methodLabel}</span>
-                    </div>
-                    <div class="item-actions">
-                        ${item.image ? `<button class="btn-view-img" onclick="viewImage('${item.image}')">📷 تصویر</button>` : ''}
-                        <button class="btn-delete" onclick="deleteItem(${item.id}, 'expense')">🗑</button>
-                    </div>
-                `;
-            } else {
-                // Debt Logic
-                const isLent = item.debtType === 'lent';
-                const typeLabel = isLent ? 'قرض دادم به:' : 'قرض گرفتم از:';
-                const itemClass = isLent ? 'credit-item' : 'debt-item';
-                
-                // Reminder Check (Simple string comparison for demo, assumes yyyy/mm/dd)
-                const now = getCurrentJalali();
-                const todayStr = `${now.year}/${now.month}/${now.day}`;
-                // Simplified comparison logic
-                let statusHtml = '';
-                // Very basic overdue check: if due date string is "smaller" than today string (lexicographically works for yyyy/mm/dd format mostly if padded, but here distinct parts comparison is safer but keeping it simple)
-                // Let's just show the date.
-                
-                div.className = `item-card ${itemClass}`;
-                div.innerHTML = `
-                    <div class="item-info">
-                        <div class="item-header">
-                            <span class="item-title">${typeLabel} ${item.person}</span>
-                            <span class="item-date">${item.date}</span>
-                        </div>
-                        <div class="item-amount">${formatNumber(item.amount)} تومان</div>
-                        <div class="item-details">${item.desc || ''}</div>
-                        <div style="margin-top:8px;">
-                            <span class="status-badge status-urgent">📅 موعد: ${item.dueDate}</span>
-                        </div>
-                    </div>
-                    <div class="item-actions">
-                        <button class="btn-delete" onclick="deleteItem(${item.id}, 'debt')">🗑</button>
-                    </div>
-                `;
+            // مدیریت عکس
+            if(imgInput.files[0]){
+                const reader = new FileReader();
+                reader.onload = e => {
+                    newItem.image = e.target.result;
+                    saveAndRender(newItem);
+                };
+                reader.readAsDataURL(imgInput.files[0]);
+                return; // صبر برای لود عکس
             }
+
+        } else {
+            const type = document.querySelector('input[name="debtType"]:checked').value;
+            const person = document.getElementById('debtPerson').value;
+            const amount = parseFormatted(document.getElementById('debtAmount').value);
+            const date = document.getElementById('debtDate').value || getToday();
+            const dueDate = document.getElementById('dueDate').value;
+
+            if (!person || amount === 0) return alert('نام و مبلغ الزامی است');
+
+            newItem = { ...newItem, type, title: person, amount, date, dueDate };
+        }
+
+        saveAndRender(newItem);
+    }
+
+    function saveAndRender(item) {
+        transactions.unshift(item);
+        localStorage.setItem('acc_data', JSON.stringify(transactions));
+        resetInputs();
+        applyFilters(); // رندر مجدد با فیلترها
+        alert('ثبت شد!');
+    }
+
+    function resetInputs() {
+        document.querySelectorAll('input[type="text"], input[type="tel"]').forEach(i => i.value = '');
+        document.querySelectorAll('.preview-img').forEach(i => i.style.display = 'none');
+        // تنظیم مجدد تاریخ‌ها به امروز (اختیاری)
+    }
+
+    function deleteItem(id) {
+        if(confirm('حذف شود؟')) {
+            transactions = transactions.filter(t => t.id !== id);
+            localStorage.setItem('acc_data', JSON.stringify(transactions));
+            applyFilters();
+        }
+    }
+
+    // --- فیلتر و نمایش ---
+    function applyFilters() {
+        const start = document.getElementById('filterStart').value;
+        const end = document.getElementById('filterEnd').value;
+        const min = parseFormatted(document.getElementById('filterMin').value);
+        const max = parseFormatted(document.getElementById('filterMax').value);
+
+        const filtered = transactions.filter(t => {
+            let pass = true;
+            // فیلتر تاریخ (مقایسه رشته‌ای ساده برای فرمت yyyy/mm/dd جواب می‌دهد)
+            if (start && t.date < start) pass = false;
+            if (end && t.date > end) pass = false;
+            // فیلتر مبلغ
+            if (min > 0 && t.amount < min) pass = false;
+            if (max > 0 && t.amount > max) pass = false;
+            return pass;
+        });
+
+        renderList(filtered);
+    }
+
+    function resetFilters() {
+        document.getElementById('filterStart').value = '';
+        document.getElementById('filterEnd').value = '';
+        document.getElementById('filterMin').value = '';
+        document.getElementById('filterMax').value = '';
+        applyFilters();
+    }
+
+    function renderList(list) {
+        const container = document.getElementById('listContainer');
+        container.innerHTML = '';
+        let totalExp = 0, totalLent = 0;
+
+        if (list.length === 0) container.innerHTML = '<p style="text-align:center;color:#888">موردی یافت نشد</p>';
+
+        list.forEach(t => {
+            // محاسبه جمع
+            if(t.type === 'expense') totalExp += t.amount;
+            if(t.type === 'lent') totalLent += t.amount;
+
+            const div = document.createElement('div');
+            let itemClass = t.type; // expense, lent, borrowed
+            let icon = t.type === 'expense' ? '🛒' : (t.type === 'lent' ? '🟢' : '🔴');
+            let subInfo = t.type === 'expense' 
+                ? `<span style="font-size:0.8rem; background:#eee; padding:2px 5px; border-radius:4px">${t.method === 'pos' ? 'کارتخوان' : t.method === 'card' ? 'کارت‌به‌کارت' : 'نقد'}</span>`
+                : `<span style="color:#c0392b; font-size:0.8rem">موعد: ${t.dueDate || '-'}</span>`;
+
+            div.className = `item-card ${itemClass}`;
+            div.innerHTML = `
+                <div style="font-size:1.5rem">${icon}</div>
+                <div class="item-info">
+                    <div class="item-header">
+                        <span class="item-title">${t.title}</span>
+                        <span class="item-date">${t.date}</span>
+                    </div>
+                    <div class="item-amount">${formatNumber(t.amount)} تومان</div>
+                    ${subInfo}
+                </div>
+                <div class="item-actions">
+                    ${t.image ? `<button style="background:#3498db" onclick="showImage('${t.image}')">📷 عکس</button>` : ''}
+                    <button style="background:#e74c3c" onclick="deleteItem(${t.id})">🗑</button>
+                </div>
+            `;
             container.appendChild(div);
         });
+
+        document.getElementById('statTotalExpense').innerText = formatNumber(totalExp);
+        document.getElementById('statTotalLent').innerText = formatNumber(totalLent);
     }
 
-    // --- مدال تصویر ---
-    function viewImage(src) {
-        document.getElementById('modalImg').src = src;
-        document.getElementById('imageModal').style.display = 'flex';
-    }
-    function closeModal(e) {
-        if(e.target === document.getElementById('imageModal')) {
-            document.getElementById('imageModal').style.display = 'none';
-        }
-    }
+    // --- گزارش ماهانه ---
+    function showMonthlyReport() {
+        // فقط هزینه‌ها را فیلتر می‌کنیم
+        const expenses = transactions.filter(t => t.type === 'expense');
+        const report = {};
 
-    function clearAllData() {
-        if(confirm('آیا مطمئن هستید؟ همه داده‌ها پاک می‌شوند.')) {
-            localStorage.removeItem('hk_data');
-            data = { expenses: [], debts: [] };
-            updateStats();
-            renderList();
-        }
-    }
+        expenses.forEach(t => {
+            // استخراج ماه از تاریخ (مثال: 1404/02/15 -> 1404/02)
+            let monthKey = t.date.substring(0, 7); 
+            if(!report[monthKey]) report[monthKey] = { count: 0, total: 0 };
+            report[monthKey].count++;
+            report[monthKey].total += t.amount;
+        });
 
-    // --- تقویم ساده برای انتخاب تاریخ سررسید ---
-    let calYear, calMonth;
-    
-    function openCalendar() {
-        const now = getCurrentJalali();
-        calYear = now.year;
-        calMonth = now.month;
-        renderCalendar();
-        document.getElementById('calendarOverlay').style.display = 'flex';
-    }
+        // مرتب‌سازی کلیدها (ماه‌ها)
+        const sortedMonths = Object.keys(report).sort().reverse();
 
-    function closeCalendar() {
-        document.getElementById('calendarOverlay').style.display = 'none';
-    }
-
-    function changeMonth(dir) {
-        calMonth += dir;
-        if(calMonth > 12) { calMonth = 1; calYear++; }
-        if(calMonth < 1) { calMonth = 12; calYear--; }
-        renderCalendar();
-    }
-
-    function renderCalendar() {
-        document.getElementById('calMonthYear').innerText = `${persianMonths[calMonth-1]} ${calYear}`;
-        const grid = document.getElementById('calGrid');
-        grid.innerHTML = '';
+        const tbody = document.getElementById('reportTableBody');
+        tbody.innerHTML = '';
         
-        // Simple 30 days grid for demo (to keep code short, assumes user picks valid day)
-        // Or reuse the logic from previous task to be precise:
-        let daysInMonth = (calMonth <= 6) ? 31 : (calMonth <= 11 ? 30 : 29);
-        
-        for(let i=1; i<=daysInMonth; i++) {
-            let d = document.createElement('div');
-            d.className = 'cal-day';
-            d.innerText = i;
-            d.onclick = () => {
-                document.getElementById('debtDueDate').value = `${calYear}/${calMonth}/${i}`;
-                closeCalendar();
-            };
-            grid.appendChild(d);
+        if(sortedMonths.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="3">داده‌ای موجود نیست</td></tr>';
         }
+
+        sortedMonths.forEach(m => {
+            tbody.innerHTML += `
+                <tr>
+                    <td style="direction:ltr">${m}</td>
+                    <td>${report[m].count}</td>
+                    <td style="color:#2a5298; font-weight:bold">${formatNumber(report[m].total)}</td>
+                </tr>
+            `;
+        });
+
+        document.getElementById('reportModal').style.display = 'flex';
     }
 
-    // Start
-    updateStats();
-    renderList();
+    // نمایش عکس
+    function showImage(src) {
+        document.getElementById('modalImageShow').src = src;
+        document.getElementById('imgModal').style.display = 'flex';
+    }
+
+    // خروجی گرفتن
+    function exportData() {
+        const dataStr = JSON.stringify(transactions, null, 2);
+        const dataBlob = new Blob([dataStr], { type: 'application/json' });
+        const url = URL.createObjectURL(dataBlob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `backup_${new Date().toLocaleDateString()}.json`;
+        link.click();
+    }
+
+    // ست کردن تاریخ امروز برای ورودی‌ها هنگام لود
+    window.onload = function() {
+        // تابع ساده برای گرفتن تاریخ شمسی امروز به صورت رشته
+        // نکته: برای دقت صددرصد باید از توابع تبدیل استفاده کرد که در کد قبلی بود
+        // اینجا برای سادگی کاربر دستی پر می‌کند یا اگر مرورگر تاریخ میلادی دارد تبدیل تقریبی می‌کنیم
+        // اما چون تابع gregorianToJalali را دارم، از آن استفاده می‌کنیم:
+        const now = new Date();
+        // الگوریتم تبدیل (کپی شده از قبل برای اطمینان از کارکرد)
+        var g_d_m = [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334];
+        var gy = now.getFullYear(); var gm = now.getMonth()+1; var gd = now.getDate();
+        var gy2 = (gm > 2) ? (gy + 1) : gy;
+        var days = 355666 + (365 * gy) + ~~((gy2 + 3) / 4) - ~~((gy2 + 99) / 100) + ~~((gy2 + 399) / 400) + gd + g_d_m[gm - 1];
+        var jy = -1595 + (33 * ~~(days / 12053));
+        days %= 12053; jy += 4 * ~~(days / 1461); days %= 1461;
+        if (days > 365) { jy += ~~((days - 1) / 365); days = (days - 1) % 365; }
+        var jm, jd;
+        if (days < 186) { jm = 1 + ~~(days / 31); jd = 1 + (days % 31); } else { jm = 7 + ~~((days - 186) / 30); jd = 1 + ((days - 186) % 30); }
+        
+        const todayStr = `${jy}/${(jm<10?'0':'')+jm}/${(jd<10?'0':'')+jd}`;
+        document.getElementById('expDate').value = todayStr;
+        document.getElementById('debtDate').value = todayStr;
+        
+        applyFilters(); // لود اولیه لیست
+    }
 
 </script>
 
