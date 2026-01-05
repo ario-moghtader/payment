@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>حسابدار شخصی هوشمند</title>
+    <title>حسابدار شخصی 💰 آریو مقتدر 09120857429</title>
     <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Vazirmatn', Tahoma, sans-serif; }
@@ -63,19 +63,15 @@
         .item-title { font-weight: bold; font-size: 1.2rem; }
         .item-date { font-size: 0.9rem; color: #777; background: #eee; padding: 4px 10px; border-radius: 20px; }
         .item-amount { font-size: 1.4rem; font-weight: bold; color: #2a5298; display: block; margin-top: 5px;}
-        
-        /* New Image Style in List */
-        .list-img { max-width: 100px; max-height: 100px; border-radius: 10px; border: 1px solid #ddd; margin-top: 10px; cursor: pointer; display: block; }
+        .list-img { max-width: 120px; max-height: 120px; border-radius: 10px; border: 1px solid #ddd; margin-top: 10px; cursor: pointer; display: block; }
 
         /* Modals */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 2000; justify-content: center; align-items: center; backdrop-filter: blur(5px); }
         .modal-content { background: white; padding: 30px; border-radius: 25px; max-width: 95%; max-height: 90vh; overflow: auto; width: 600px; position: relative; }
         
-        /* Report Table */
         .report-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
         .report-table th, .report-table td { padding: 15px; text-align: center; border-bottom: 1px solid #eee; }
         
-        /* Detailed Report List inside Modal */
         .detail-item { border-bottom: 1px solid #eee; padding: 15px 0; display: flex; flex-direction: column; gap: 10px; }
         .detail-row { display: flex; justify-content: space-between; align-items: center; }
         .detail-img { max-width: 150px; max-height: 150px; border-radius: 10px; border: 1px solid #ddd; margin-top: 10px; cursor: pointer; }
@@ -94,17 +90,28 @@
         .file-box { border: 3px dashed #cbd5e0; padding: 25px; text-align: center; border-radius: 20px; cursor: pointer; margin-bottom: 25px; background: #f8fafc; display: block;}
         .preview-img { max-height: 150px; display: none; margin: 20px auto 0; border-radius: 15px; }
 
-        /* Print Styles */
+        /* --- PRINT STYLES (Fixed) --- */
+        #print-header { display: none; text-align: center; margin-bottom: 20px; border-bottom: 2px solid #000; padding-bottom: 10px; }
+        #print-header h2 { margin: 0; font-size: 18pt; }
+        #print-header p { margin: 5px 0 0; font-size: 12pt; color: #333; }
+
         @media print {
             body { background: white; color: black; }
             header, .stats-container, .btn-container, .tabs, .form-card, .filter-section, .item-actions, #filterOptions, .modal:not(#reportModal) { display: none !important; }
+            
+            /* Show Custom Header */
+            #print-header { display: block !important; }
+            
+            /* Remove browser header/footer if possible */
+            @page { margin-top: 1cm; margin-bottom: 1cm; }
+
             .container { max-width: 100%; padding: 0; }
             .list-section { display: block; }
             
             /* Ensure images print */
-            .list-img, .detail-img { max-width: 300px; max-height: 300px; display: block !important; margin: 10px 0; }
+            .list-img, .detail-img { max-width: 250px; max-height: 250px; display: block !important; margin: 10px 0; border: 1px solid #ccc; }
             
-            /* Print settings for Report Modal */
+            /* Report Modal Print Logic */
             #reportModal { display: block !important; position: static; background: white; height: auto; z-index: auto; }
             #reportModal .modal-content { box-shadow: none; max-width: 100%; width: 100%; overflow: visible; padding: 0; }
             #reportModal button { display: none; }
@@ -112,15 +119,20 @@
             #reportSummaryView, #reportDetailView { display: none; }
             .print-active { display: block !important; }
 
-            .item-card, .detail-item { break-inside: avoid; page-break-inside: avoid; border: 1px solid #ddd; margin-bottom: 10px; }
+            .item-card, .detail-item { break-inside: avoid; page-break-inside: avoid; border: 1px solid #ddd; margin-bottom: 10px; box-shadow: none; }
         }
     </style>
 </head>
 <body>
 
+<div id="print-header">
+    <h2>گزارش حسابداری شخصی</h2>
+    <p id="print-date">تاریخ گزارش: ---</p>
+</div>
+
 <div class="container">
     <header>
-        <h2>💰 حسابدار شخصی هوشمند</h2>
+        <h2> حسابدار شخصی 💰 آریو مقتدر 09120857429</h2>
     </header>
 
     <div class="stats-container">
@@ -183,7 +195,6 @@
         <div class="form-group"><label class="form-label">نام طرف حساب</label><input type="text" id="debtPerson" class="form-input"></div>
         <div class="form-group"><label class="form-label">مبلغ</label><input type="tel" id="debtAmount" class="form-input" oninput="formatInput(this)"></div>
         <div class="form-group"><label class="form-label">توضیحات (اختیاری)</label><input type="text" id="debtDesc" class="form-input" placeholder="بابت..."></div>
-        
         <div class="form-group"><label class="form-label">تاریخ ثبت</label><div class="date-input-wrapper"><input type="text" id="debtDate" class="form-input date-picker" readonly onclick="openCalendar('debtDate')"></div></div>
         <div class="form-group"><label class="form-label">موعد بازگشت</label><div class="date-input-wrapper"><input type="text" id="dueDate" class="form-input date-picker" readonly onclick="openCalendar('dueDate')"></div></div>
         <button class="btn btn-primary" onclick="addTransaction('debt')">ثبت قرض</button>
@@ -378,6 +389,9 @@
         document.getElementById('filterStart').value = todayStr;
         document.getElementById('filterEnd').value = todayStr;
         
+        // تنظیم سربرگ پرینت
+        document.getElementById('print-date').textContent = `تاریخ گزارش: ${todayStr}`;
+        
         applyFilters();
     };
 
@@ -437,7 +451,7 @@
             const type = document.querySelector('input[name="debtType"]:checked').value;
             const person = document.getElementById('debtPerson').value;
             const amount = parseFormatted(document.getElementById('debtAmount').value);
-            const desc = document.getElementById('debtDesc').value; // دریافت توضیحات
+            const desc = document.getElementById('debtDesc').value;
             const date = document.getElementById('debtDate').value;
             const dueDate = document.getElementById('dueDate').value;
             if (!person || amount === 0 || !date) return alert('نام، مبلغ و تاریخ ثبت الزامی است');
@@ -449,14 +463,18 @@
     function saveAndRender(item) {
         transactions.unshift(item);
         localStorage.setItem('acc_data', JSON.stringify(transactions));
+        
+        // Reset Inputs
         document.getElementById('expAmount').value = '';
         document.getElementById('debtAmount').value = '';
         document.getElementById('expDesc').value = '';
         document.getElementById('debtPerson').value = '';
         document.getElementById('debtDesc').value = '';
         document.getElementById('dueDate').value = '';
+        
         document.querySelectorAll('.preview-img').forEach(i => i.style.display = 'none');
         document.getElementById('expImg').value = '';
+        
         applyFilters();
         alert('ثبت شد ✅');
     }
@@ -519,10 +537,7 @@
                 ? `<span style="font-size:0.9rem; background:#f0f0f0; padding:4px 8px; border-radius:8px; color:#555;">${t.method === 'pos' ? 'کارتخوان' : t.method === 'card' ? 'کارت‌به‌کارت' : 'نقد'}</span>`
                 : `<span style="color:#c0392b; font-size:0.9rem; font-weight:bold;">موعد: ${t.dueDate || '---'}</span>`;
             
-            // توضیحات قرض
-            let debtDescHtml = (t.type !== 'expense' && t.desc) ? `<div style="font-size:0.85rem; color:#666; margin-top:5px;">توضیحات: ${t.desc}</div>` : '';
-
-            // عکس در لیست
+            let debtDescHtml = (t.type !== 'expense' && t.desc) ? `<div style="font-size:0.85rem; color:#666; margin-top:5px;">${t.desc}</div>` : '';
             let imgHtml = t.image ? `<img src="${t.image}" class="list-img" onclick="showImage('${t.image}')">` : '';
 
             div.className = `item-card ${itemClass}`;
@@ -550,16 +565,12 @@
         document.getElementById('statTotalBorrowed').textContent = formatNumber(totalBorrowed);
     }
 
-    // --- REPORT & DETAILS LOGIC ---
-    let currentDetailMonth = '';
-
+    // --- REPORT & DETAILS ---
     function openReportModal() {
         document.getElementById('reportSummaryView').style.display = 'block';
         document.getElementById('reportDetailView').style.display = 'none';
-        
         document.getElementById('reportSummaryView').classList.add('print-active');
         document.getElementById('reportDetailView').classList.remove('print-active');
-        
         showMonthlyReportTable();
         document.getElementById('reportModal').style.display = 'flex';
     }
@@ -589,17 +600,13 @@
     }
 
     function showMonthDetails(monthKey) {
-        currentDetailMonth = monthKey;
         const details = transactions.filter(t => t.type === 'expense' && t.date.startsWith(monthKey)).sort((a,b) => b.date.localeCompare(a.date));
-        
         const container = document.getElementById('detailContainer');
         container.innerHTML = '';
-        
         document.getElementById('detailTitle').textContent = `ریز مخارج: ${monthKey}`;
         
-        if (details.length === 0) {
-            container.innerHTML = '<p>موردی نیست</p>';
-        } else {
+        if (details.length === 0) container.innerHTML = '<p>موردی نیست</p>';
+        else {
             details.forEach(t => {
                 const method = t.method === 'pos' ? 'کارتخوان' : t.method === 'card' ? 'کارت‌به‌کارت' : 'نقد';
                 const imgHtml = t.image 
@@ -624,7 +631,6 @@
 
         document.getElementById('reportSummaryView').style.display = 'none';
         document.getElementById('reportDetailView').style.display = 'block';
-        
         document.getElementById('reportSummaryView').classList.remove('print-active');
         document.getElementById('reportDetailView').classList.add('print-active');
     }
@@ -632,12 +638,14 @@
     function backToSummary() {
         document.getElementById('reportDetailView').style.display = 'none';
         document.getElementById('reportSummaryView').style.display = 'block';
-        
         document.getElementById('reportDetailView').classList.remove('print-active');
         document.getElementById('reportSummaryView').classList.add('print-active');
     }
 
     function printFilteredReport() {
+        // Ensure date is updated
+        const now = gregorianToJalali(new Date().getFullYear(), new Date().getMonth() + 1, new Date().getDate());
+        document.getElementById('print-date').textContent = `تاریخ گزارش: ${now.year}/${(now.month<10?'0':'')+now.month}/${(now.day<10?'0':'')+now.day}`;
         document.getElementById('reportModal').style.display = 'none';
         window.print();
     }
