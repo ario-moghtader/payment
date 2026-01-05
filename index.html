@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> حسابدار شخصی 💰آریو مقتدر 09120857429 </title>
+    <title>حسابدار شخصی هوشمند</title>
     <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Vazirmatn', Tahoma, sans-serif; }
@@ -52,7 +52,6 @@
         .filter-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-top: 20px; }
         .filter-header { color: white; display: flex; justify-content: space-between; align-items: center; cursor: pointer; font-weight: bold; padding: 10px; border-radius: 10px; background: rgba(0,0,0,0.2); }
 
-        /* List Styling */
         .list-section { margin-top: 30px; }
         .item-card { background: white; padding: 25px; border-radius: 20px; margin-bottom: 20px; display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-start; border-right: 8px solid #ccc; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
         .item-card.expense { border-color: #f39c12; }
@@ -72,6 +71,14 @@
         .report-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
         .report-table th, .report-table td { padding: 15px; text-align: center; border-bottom: 1px solid #eee; }
         
+        /* Report Type Selector */
+        .report-type-selector { display: flex; gap: 10px; margin-bottom: 20px; justify-content: center; background: #f0f0f0; padding: 10px; border-radius: 15px; }
+        .report-type-btn { padding: 10px 20px; border: none; border-radius: 10px; cursor: pointer; background: transparent; font-weight: bold; transition: 0.3s; }
+        .report-type-btn.active { background: white; shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .report-type-btn.active.r-exp { color: #f39c12; border-bottom: 3px solid #f39c12; }
+        .report-type-btn.active.r-lent { color: #27ae60; border-bottom: 3px solid #27ae60; }
+        .report-type-btn.active.r-borrowed { color: #e74c3c; border-bottom: 3px solid #e74c3c; }
+
         .detail-item { border-bottom: 1px solid #eee; padding: 15px 0; display: flex; flex-direction: column; gap: 10px; }
         .detail-row { display: flex; justify-content: space-between; align-items: center; }
         .detail-img { max-width: 150px; max-height: 150px; border-radius: 10px; border: 1px solid #ddd; margin-top: 10px; cursor: pointer; }
@@ -90,34 +97,24 @@
         .file-box { border: 3px dashed #cbd5e0; padding: 25px; text-align: center; border-radius: 20px; cursor: pointer; margin-bottom: 25px; background: #f8fafc; display: block;}
         .preview-img { max-height: 150px; display: none; margin: 20px auto 0; border-radius: 15px; }
 
-        /* --- PRINT STYLES (Fixed) --- */
+        /* --- PRINT STYLES --- */
         #print-header { display: none; text-align: center; border-bottom: 2px solid #333; padding-bottom: 15px; margin-bottom: 20px; }
         #print-header h2 { margin: 0; font-size: 14pt; direction: ltr; font-weight: bold; color: #000; } 
 
         @media print {
-            /* 1. حذف حاشیه مرورگر برای از بین بردن هدرهای پیش‌فرض میلادی */
-            @page { margin: 0; size: auto; }
+            @page { margin: 0.5cm; }
+            body { background: white; color: black; padding: 0; margin: 0; }
+            header, .stats-container, .btn-container, .tabs, .form-card, .filter-section, .item-actions, #filterOptions, .modal:not(#reportModal), .report-type-selector { display: none !important; }
             
-            /* 2. تنظیم حاشیه برای محتوای داخلی تا به لبه کاغذ نچسبد */
-            body { background: white; color: black; padding: 1cm; margin: 0; }
-            
-            /* مخفی کردن عناصر اضافی */
-            header, .stats-container, .btn-container, .tabs, .form-card, .filter-section, .item-actions, #filterOptions, .modal:not(#reportModal) { display: none !important; }
-            
-            /* نمایش هدر اختصاصی شمسی */
             #print-header { display: block !important; }
-            
             .container { max-width: 100%; padding: 0; margin: 0; width: 100%; }
             .list-section { display: block; margin-top: 0; }
-            
             .list-img, .detail-img { max-width: 250px; max-height: 250px; display: block !important; margin: 10px 0; border: 1px solid #ccc; }
             
-            /* تنظیمات مودال برای پرینت */
             #reportModal { display: block !important; position: static; background: white; height: auto; z-index: auto; width: 100%; }
             #reportModal .modal-content { box-shadow: none; max-width: 100%; width: 100%; overflow: visible; padding: 0; margin: 0; border: none; }
             #reportModal button { display: none; }
             
-            /* نمایش فقط بخش فعال (خلاصه یا ریز) */
             #reportSummaryView, #reportDetailView { display: none; }
             .print-active { display: block !important; width: 100%; }
 
@@ -152,7 +149,7 @@
     </div>
 
     <div class="btn-container">
-        <button class="btn btn-warning" style="flex: 1;" onclick="openReportModal()">📊 گزارش ماهانه (کل)</button>
+        <button class="btn btn-warning" style="flex: 1;" onclick="openReportModal()">📊 گزارش‌های ماهانه</button>
         <button class="btn btn-dark" style="flex: 1;" onclick="exportAllData()">📤 بکاپ (Backup)</button>
         <button class="btn btn-success" style="flex: 1;" onclick="document.getElementById('importFile').click()">📥 بازیابی بکاپ</button>
         <input type="file" id="importFile" style="display: none;" accept=".json" onchange="importData(event)">
@@ -236,7 +233,14 @@
 <div id="reportModal" class="modal" onclick="if(event.target === this) document.getElementById('reportModal').style.display='none'">
     <div class="modal-content">
         <div id="reportSummaryView" class="print-active">
-            <h3 style="text-align:center; margin-bottom:20px;">📊 گزارش جامع ماهانه</h3>
+            <h3 style="text-align:center; margin-bottom:10px;">📊 گزارش جامع ماهانه</h3>
+            
+            <div class="report-type-selector">
+                <button class="report-type-btn r-exp active" onclick="switchReportType('expense')">مخارج</button>
+                <button class="report-type-btn r-lent" onclick="switchReportType('lent')">طلب‌ها (دادم)</button>
+                <button class="report-type-btn r-borrowed" onclick="switchReportType('borrowed')">بدهی‌ها (گرفتم)</button>
+            </div>
+
             <table class="report-table">
                 <thead><tr><th>ماه</th><th>تعداد</th><th>جمع کل</th><th>عملیات</th></tr></thead>
                 <tbody id="reportTableBody"></tbody>
@@ -246,7 +250,7 @@
 
         <div id="reportDetailView" style="display: none;">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; border-bottom:2px solid #eee; padding-bottom:10px;">
-                <h3 id="detailTitle">ریز مخارج</h3>
+                <h3 id="detailTitle">ریز تراکنش‌ها</h3>
                 <button class="btn btn-dark" style="padding:5px 15px; font-size:0.9rem" onclick="backToSummary()">بازگشت ↩️</button>
             </div>
             <div id="detailContainer"></div>
@@ -510,6 +514,20 @@
         renderList(filtered);
     }
 
+    function resetFilters() {
+        document.getElementById('filterStart').value = '';
+        document.getElementById('filterEnd').value = '';
+        document.getElementById('filterMin').value = '';
+        document.getElementById('filterMax').value = '';
+        showAllTransactions();
+    }
+
+    function showAllTransactions() {
+        document.getElementById('filterStart').value = '';
+        document.getElementById('filterEnd').value = '';
+        renderList(transactions);
+    }
+
     function renderList(list) {
         const container = document.getElementById('listContainer');
         container.innerHTML = '';
@@ -557,31 +575,59 @@
         document.getElementById('statTotalBorrowed').textContent = formatNumber(totalBorrowed);
     }
 
-    // --- REPORT ---
+    // --- REPORT & DETAILS LOGIC ---
+    let currentReportType = 'expense';
+
     function openReportModal() {
+        // Reset to default view (Expense)
+        switchReportType('expense');
         document.getElementById('reportSummaryView').style.display = 'block';
         document.getElementById('reportDetailView').style.display = 'none';
+        
         document.getElementById('reportSummaryView').classList.add('print-active');
         document.getElementById('reportDetailView').classList.remove('print-active');
-        showMonthlyReportTable();
+        
         document.getElementById('reportModal').style.display = 'flex';
+    }
+
+    function switchReportType(type) {
+        currentReportType = type;
+        
+        // Update Buttons UI
+        document.querySelectorAll('.report-type-btn').forEach(btn => btn.classList.remove('active'));
+        if(type === 'expense') document.querySelector('.r-exp').classList.add('active');
+        if(type === 'lent') document.querySelector('.r-lent').classList.add('active');
+        if(type === 'borrowed') document.querySelector('.r-borrowed').classList.add('active');
+
+        showMonthlyReportTable();
     }
 
     function showMonthlyReportTable() {
         const tbody = document.getElementById('reportTableBody');
-        tbody.innerHTML = ''; // جلوگیری از تکرار
+        tbody.innerHTML = ''; // Prevent duplication
 
-        const expenses = transactions.filter(t => t.type === 'expense');
+        // Filter based on selected type
+        let filteredData = [];
+        if (currentReportType === 'expense') {
+            filteredData = transactions.filter(t => t.type === 'expense');
+        } else if (currentReportType === 'lent') {
+            filteredData = transactions.filter(t => t.type === 'debt' && t.debtType === 'lent');
+        } else if (currentReportType === 'borrowed') {
+            filteredData = transactions.filter(t => t.type === 'debt' && t.debtType === 'borrowed');
+        }
+
         const report = {};
-        expenses.forEach(t => {
+        filteredData.forEach(t => {
             let monthKey = t.date.substring(0, 7); 
             if(!report[monthKey]) report[monthKey] = { count: 0, total: 0 };
             report[monthKey].count++;
             report[monthKey].total += t.amount;
         });
+
         const sortedMonths = Object.keys(report).sort().reverse();
         
         if(sortedMonths.length === 0) tbody.innerHTML = '<tr><td colspan="4">داده‌ای موجود نیست</td></tr>';
+        
         sortedMonths.forEach(m => {
             tbody.innerHTML += `
                 <tr>
@@ -595,16 +641,37 @@
 
     function showMonthDetails(monthKey) {
         const container = document.getElementById('detailContainer');
-        container.innerHTML = ''; // جلوگیری از تکرار
+        container.innerHTML = '';
 
-        const details = transactions.filter(t => t.type === 'expense' && t.date.startsWith(monthKey)).sort((a,b) => b.date.localeCompare(a.date));
+        // Filter based on type AND month
+        let details = [];
+        if (currentReportType === 'expense') {
+            details = transactions.filter(t => t.type === 'expense' && t.date.startsWith(monthKey));
+        } else if (currentReportType === 'lent') {
+            details = transactions.filter(t => t.type === 'debt' && t.debtType === 'lent' && t.date.startsWith(monthKey));
+        } else if (currentReportType === 'borrowed') {
+            details = transactions.filter(t => t.type === 'debt' && t.debtType === 'borrowed' && t.date.startsWith(monthKey));
+        }
         
-        document.getElementById('detailTitle').textContent = `ریز مخارج: ${monthKey}`;
+        // Sort by date desc
+        details.sort((a,b) => b.date.localeCompare(a.date));
+        
+        let titleSuffix = currentReportType === 'expense' ? 'مخارج' : (currentReportType === 'lent' ? 'طلب‌ها' : 'بدهی‌ها');
+        document.getElementById('detailTitle').textContent = `ریز ${titleSuffix}: ${monthKey}`;
         
         if (details.length === 0) container.innerHTML = '<p>موردی نیست</p>';
         else {
             details.forEach(t => {
-                const method = t.method === 'pos' ? 'کارتخوان' : t.method === 'card' ? 'کارت‌به‌کارت' : 'نقد';
+                let subHtml = '';
+                if(t.type === 'expense') {
+                    const method = t.method === 'pos' ? 'کارتخوان' : t.method === 'card' ? 'کارت‌به‌کارت' : 'نقد';
+                    subHtml = `<span style="background:#eee; padding:2px 5px; border-radius:5px; font-size:0.8rem">${method}</span>`;
+                } else {
+                    subHtml = `<span style="color:#c0392b; font-size:0.8rem">سررسید: ${t.dueDate || '-'}</span>`;
+                }
+
+                let extraDesc = t.desc ? `<div style="font-size:0.85rem; color:#666; margin-top:5px;">${t.desc}</div>` : '';
+                
                 const imgHtml = t.image 
                     ? `<img src="${t.image}" class="detail-img" onclick="showImage('${t.image}')">` 
                     : `<div class="detail-no-img">بدون عکس</div>`;
@@ -617,8 +684,9 @@
                         </div>
                         <div class="detail-row">
                             <span style="color:#2a5298; font-weight:bold">${formatNumber(t.amount)} تومان</span>
-                            <span style="background:#eee; padding:2px 5px; border-radius:5px; font-size:0.8rem">${method}</span>
+                            ${subHtml}
                         </div>
+                        ${extraDesc}
                         ${imgHtml}
                     </div>
                 `;
