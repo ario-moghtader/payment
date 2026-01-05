@@ -379,7 +379,7 @@
         const j = gregorianToJalali(now.getFullYear(), now.getMonth() + 1, now.getDate());
         const time = `${now.getHours()}:${(now.getMinutes()<10?'0':'')+now.getMinutes()}`;
         const date = `${j.year}/${(j.month<10?'0':'')+j.month}/${(j.day<10?'0':'')+j.day}`;
-        const titleStr = `حسابدار شخصی 💰 آریو مقتدر 09120857429   ${time}   ${date}`;
+        const titleStr = ` حسابدار شخصی 💰 آریو مقتدر 09120857429     ${time}     ${date} `;
         document.getElementById('main-title').innerText = titleStr;
         document.getElementById('print-title-text').innerText = titleStr;
         document.title = titleStr;
